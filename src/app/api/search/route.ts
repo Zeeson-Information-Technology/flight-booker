@@ -6,11 +6,11 @@ export async function GET() {
   try {
     await connect();
     const searches = await SearchRequest.find().populate("customer");
-    return NextResponse.json(searches);
+    return NextResponse.json({ ok: true, searches });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to fetch searches" },
+      { ok: false, error: "Failed to fetch searches" },
       { status: 500 }
     );
   }
@@ -21,11 +21,14 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     await connect();
     const search = await SearchRequest.create(data);
-    return NextResponse.json(search, { status: 201 });
+    return NextResponse.json(
+      { ok: true, id: search._id.toString(), search },
+      { status: 201 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to save search" },
+      { ok: false, error: "Failed to save search" },
       { status: 500 }
     );
   }

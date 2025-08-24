@@ -6,11 +6,11 @@ export async function GET() {
   try {
     await connect();
     const customers = await Customer.find();
-    return NextResponse.json(customers);
+    return NextResponse.json({ ok: true, customers });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to fetch customers" },
+      { ok: false, error: "Failed to fetch customers" },
       { status: 500 }
     );
   }
@@ -21,11 +21,11 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     await connect();
     const customer = await Customer.create(data);
-    return NextResponse.json(customer, { status: 201 });
+    return NextResponse.json({ ok: true, customer }, { status: 201 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Failed to create customer" },
+      { ok: false, error: "Failed to create customer" },
       { status: 500 }
     );
   }
