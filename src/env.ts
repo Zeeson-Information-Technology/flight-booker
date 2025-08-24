@@ -5,4 +5,6 @@ const envSchema = z.object({
   APP_BASE_URL: z.string().url(),
 });
 
-export const env = envSchema.parse(process.env);
+export function getEnv() {
+  return envSchema.parse(process.env);
+}
