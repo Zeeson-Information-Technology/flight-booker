@@ -10,13 +10,12 @@ const globalWithMongoose = global as typeof globalThis & {
   mongoose?: MongooseCache;
 };
 
-if (!globalWithMongoose.mongoose) {
-  globalWithMongoose.mongoose = { conn: null, promise: null };
-}
-
 export async function connect() {
-  const cache = globalWithMongoose.mongoose!;
-  if (cache.conn) return cache.conn;
+  const cache =
+    globalWithMongoose.mongoose ??= { conn: null, promise: null };
+  if (cache.conn) {
+    return cache.conn;
+  }
   if (!cache.promise) {
     cache.promise = mongoose.connect(env.MONGODB_URI);
   }
